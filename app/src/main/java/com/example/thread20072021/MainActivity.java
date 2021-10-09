@@ -3,15 +3,17 @@ package com.example.thread20072021;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Thread threadA, threadB , threadC;
-    int a , b , c;
+    Thread threadA, threadB, threadC;
+    int a, b, c;
     MyFlag myFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
         threadA = new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronized (myFlag){
-                    for (int i = 1 ; i <= 50 ; i++){
-                        if (myFlag.index == 1){
+                synchronized (myFlag) {
+                    for (int i = 1; i <= 50; ) {
+                        if (myFlag.index == 1) {
                             a = i;
                             Log.d("BBB", "A : " + a);
+                            i++;
                             myFlag.index = 2;
                             myFlag.notifyAll();
-                        }else {
+                        } else {
                             try {
                                 myFlag.wait();
                             } catch (InterruptedException e) {
@@ -47,19 +50,14 @@ public class MainActivity extends AppCompatActivity {
         threadB = new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronized (myFlag){
-                    for (int i = 1 ; i <= 50 ; i++){
-                        if (myFlag.index == 2){
+                synchronized (myFlag) {
+                    for (int i = 1; i <= 50; ) {
+                        if (myFlag.index == 2) {
                             b = i;
                             Log.d("BBB", "B : " + b);
+                            i++;
                             myFlag.index = 3;
                             myFlag.notifyAll();
-                        }else {
-                            try {
-                                myFlag.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                         }
                     }
                 }
@@ -70,14 +68,16 @@ public class MainActivity extends AppCompatActivity {
         threadC = new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronized (myFlag){
-                    for (int i = 1 ; i <= 50 ; i++){
-                        if (myFlag.index == 3){
+                synchronized (myFlag) {
+                    for (int i = 1; i <= 50; ) {
+                        if (myFlag.index == 3) {
                             c = a + b;
                             Log.d("BBB", "C : " + c);
+                            i++;
                             myFlag.index = 1;
                             myFlag.notifyAll();
-                        }else {
+
+                        } else {
                             try {
                                 myFlag.wait();
                             } catch (InterruptedException e) {
