@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     Thread threadA, threadB , threadC;
     int a , b , c;
+    MyFlag myFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,31 +20,41 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("BBB",Thread.currentThread().getName());
         a = b = c = 0;
 
+        myFlag = new MyFlag(1);
+
+
         threadA = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 1 ; i <= 50 ; i++){
-                    a = i;
-                    Log.d("BBB", "A : " + a);
+                synchronized (myFlag){
+                    for (int i = 1 ; i <= 50 ; i++){
+                        a = i;
+                        Log.d("BBB", "A : " + a);
+                    }
                 }
             }
         });
         threadB = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 1 ; i <= 50 ; i++){
-                    b = i;
-                    Log.d("BBB", "B : " + b);
+                synchronized (myFlag){
+                    for (int i = 1 ; i <= 50 ; i++){
+                        b = i;
+                        Log.d("BBB", "B : " + b);
+                    }
                 }
+
             }
         });
 
         threadC = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 1 ; i <= 50 ; i++){
-                    c = a + b;
-                    Log.d("BBB", "C : " + c);
+                synchronized (myFlag){
+                    for (int i = 1 ; i <= 50 ; i++){
+                        c = a + b;
+                        Log.d("BBB", "C : " + c);
+                    }
                 }
             }
         });
