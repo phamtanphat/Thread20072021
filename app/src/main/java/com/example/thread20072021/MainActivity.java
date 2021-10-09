@@ -28,8 +28,18 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 synchronized (myFlag){
                     for (int i = 1 ; i <= 50 ; i++){
-                        a = i;
-                        Log.d("BBB", "A : " + a);
+                        if (myFlag.index == 1){
+                            a = i;
+                            Log.d("BBB", "A : " + a);
+                            myFlag.index = 2;
+                            myFlag.notifyAll();
+                        }else {
+                            try {
+                                myFlag.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
@@ -39,8 +49,18 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 synchronized (myFlag){
                     for (int i = 1 ; i <= 50 ; i++){
-                        b = i;
-                        Log.d("BBB", "B : " + b);
+                        if (myFlag.index == 2){
+                            b = i;
+                            Log.d("BBB", "B : " + b);
+                            myFlag.index = 3;
+                            myFlag.notifyAll();
+                        }else {
+                            try {
+                                myFlag.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
 
@@ -52,8 +72,18 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 synchronized (myFlag){
                     for (int i = 1 ; i <= 50 ; i++){
-                        c = a + b;
-                        Log.d("BBB", "C : " + c);
+                        if (myFlag.index == 3){
+                            c = a + b;
+                            Log.d("BBB", "C : " + c);
+                            myFlag.index = 1;
+                            myFlag.notifyAll();
+                        }else {
+                            try {
+                                myFlag.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
